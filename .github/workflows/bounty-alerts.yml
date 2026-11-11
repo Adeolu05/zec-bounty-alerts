@@ -5,6 +5,11 @@ on:
     # Every 10 minutes. GitHub can start scheduled runs a little late.
     - cron: "*/10 * * * *"
   workflow_dispatch:
+    inputs:
+      test_telegram:
+        description: "Only send a Telegram test message"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -30,3 +35,4 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           MATCH_CATEGORIES: "Design and Videos,Web Development"
+          TEST_TELEGRAM: ${{ inputs.test_telegram == true && 'true' || 'false' }}

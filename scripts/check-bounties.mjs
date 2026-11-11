@@ -145,9 +145,23 @@ async function sendTelegram(text) {
   });
   // Never print the token: report the status only.
   if (!res.ok) console.warn(`Telegram send failed: ${res.status}`);
+  return res.ok;
 }
 
 async function main() {
+  // Manual "send a test message" run, to check the Telegram secrets.
+  if (process.env.TEST_TELEGRAM === "true") {
+    if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
+      throw new Error("TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID secret is missing");
+    }
+    const ok = await sendTelegram(
+      "<b>ZecHub bounty alerts are connected.</b>\nNew bounties will arrive here.",
+    );
+    if (!ok) throw new Error("Telegram test message failed");
+    console.log("Telegram test message sent.");
+    return;
+  }
+
   const repo = process.env.GITHUB_REPOSITORY;
   if (!repo || !process.env.GITHUB_TOKEN) {
     throw new Error("GITHUB_REPOSITORY and GITHUB_TOKEN are required");

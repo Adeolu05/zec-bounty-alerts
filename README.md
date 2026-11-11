@@ -19,6 +19,7 @@ On the first run it alerts the bounties that are open and were posted in the las
 1. In Telegram, message @BotFather, send `/newbot` and follow the steps. It gives you a bot token.
 2. Send any message to your new bot, then open `https://api.telegram.org/bot<token>/getUpdates` in a browser and copy `chat.id`.
 3. In this repo: Settings > Secrets and variables > Actions > New repository secret. Add `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID`.
+4. Test it: Actions > ZecHub bounty alerts > Run workflow, tick "Only send a Telegram test message", then Run. Your bot should message you.
 
 The token is only read from the secret and is never printed in the logs.
 
