@@ -2,7 +2,7 @@ name: ZecHub bounty alerts
 
 on:
   schedule:
-    # Every 10 minutes. GitHub can start scheduled runs a little late.
+    # Every 10 minutes. GitHub can start scheduled runs a little late. Times are UTC.
     - cron: "*/10 * * * *"
   workflow_dispatch:
     inputs:
