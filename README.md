@@ -2,7 +2,7 @@
 
 Get notified when a new bounty is posted on [ZEC Bounties](https://bounties.zechub.wiki).
 
-A GitHub Action checks the public bounty list every 10 minutes. For each new bounty that is approved, public and still open, it opens an issue in this repo with the reward, deadline, category, team and an "Open the bounty and apply" link. Bounties in your categories get a `matches-you` label. GitHub then notifies you by email and in the GitHub mobile app.
+A GitHub Action checks the public bounty list about every 10 minutes. For each new bounty that is approved, public and still open, it opens an issue in this repo with the reward, deadline, category, team and an "Open the bounty and apply" link. Bounties in your categories get a `matches-you` label. GitHub then notifies you by email and in the GitHub mobile app.
 
 It can also send a Telegram message for each new bounty (optional, see below).
 
