@@ -20,9 +20,24 @@ const MATCH_CATEGORIES = (
   .filter(Boolean);
 const OPEN_STATUSES = new Set(["TO_DO", "IN_PROGRESS"]);
 const MARKER = /<!-- bounty:([A-Za-z0-9_-]{1,64}) -->/;
+// A bounty someone was assigned to this soon after it was created was made
+// for that person (a reward for merged work), not posted for applicants.
+const MADE_FOR_SOMEONE_MS = 15 * 60 * 1000;
 
-// Bounties worth an alert: approved, public, still open, created recently,
-// and not an admin's wallet test.
+// Already taken: it has a chosen assignee, or it was assigned at creation.
+// Open bounties that take several applicants have no `assignee`, and their
+// first assignment comes hours or days later, so they still get an alert.
+export function alreadyTaken(b) {
+  if (b.assignee) return true;
+  const created = new Date(b.dateCreated).getTime();
+  return (Array.isArray(b.assignees) ? b.assignees : []).some((a) => {
+    const at = new Date(a?.assignedAt).getTime();
+    return Number.isFinite(at) && at - created <= MADE_FOR_SOMEONE_MS;
+  });
+}
+
+// Bounties worth an alert: approved, public, still open, not already taken,
+// created recently, and not an admin's wallet test.
 export function selectCandidates(bounties, now = new Date()) {
   const since = now.getTime() - LOOKBACK_DAYS * 24 * 60 * 60 * 1000;
   return bounties.filter(
@@ -32,6 +47,7 @@ export function selectCandidates(bounties, now = new Date()) {
       b.isApproved === true &&
       b.isPrivate !== true &&
       OPEN_STATUSES.has(b.status) &&
+      !alreadyTaken(b) &&
       new Date(b.dateCreated).getTime() >= since &&
       !/^\s*(zcash\s+)?test\b/i.test(b.title || ""),
   );

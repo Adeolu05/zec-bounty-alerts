@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 
 import {
   selectCandidates,
+  alreadyTaken,
   formatIssue,
   formatTelegram,
   neutralize,
@@ -20,7 +21,17 @@ test("only approved, public, open, recent, non-test bounties are picked", () => 
     "cmw9r69350029cv86e2tlsn0c", // TO_DO
     "cmw9qtgmn0023cv86fbbihlr1", // TO_DO
     "cmw9pp3h8001xcv86rwisojcn", // IN_PROGRESS, may take more applicants
+    "multi1", // IN_PROGRESS, applicants approved hours later
   ]);
+});
+
+test("bounties already taken are skipped, open multi-applicant ones are kept", () => {
+  const byId = Object.fromEntries(bounties.map((b) => [b.id, b]));
+  assert.equal(alreadyTaken(byId.reward1), true, "assignee set at creation");
+  assert.equal(alreadyTaken(byId.reward2), true, "assigned 2 minutes after posting");
+  assert.equal(alreadyTaken(byId.multi1), false, "first applicant approved 4 hours later");
+  assert.equal(alreadyTaken(byId.cmw9r69350029cv86e2tlsn0c), false, "no assignees field");
+  assert.equal(alreadyTaken({ dateCreated: "2026-11-11T10:00:00Z", assignees: [{ assignedAt: "bad" }] }), false);
 });
 
 test("issue has the apply link, details, label and a hidden id marker", () => {
