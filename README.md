@@ -38,3 +38,7 @@ Set these in the workflow file (`.github/workflows/bounty-alerts.yml`):
 - GitHub can start scheduled runs a few minutes late, and turns off schedules on a public repo after 60 days without any commits. Re-enable it from the Actions tab if that happens.
 - Text from the bounty site is cleaned before it goes into an issue, so it cannot @-mention anyone or link to issues here.
 - Tests: `npm test` (Node 20+, no dependencies).
+
+## License
+
+[MIT](LICENSE)
