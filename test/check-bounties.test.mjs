@@ -23,6 +23,11 @@ test("only approved, public, open, recent, non-test bounties are picked", () => 
     "cmw9pp3h8001xcv86rwisojcn", // IN_PROGRESS, may take more applicants
     "multi1", // IN_PROGRESS, applicants approved hours later
   ]);
+    "cmw9r69350029cv86e2tlsn0c", // TO_DO
+    "cmw9qtgmn0023cv86fbbihlr1", // TO_DO
+    "cmw9pp3h8001xcv86rwisojcn", // IN_PROGRESS, may take more applicants
+    "multi1", // IN_PROGRESS, applicants approved hours later
+  ]);
 });
 
 test("bounties already taken are skipped, open multi-applicant ones are kept", () => {
@@ -53,6 +58,11 @@ test("issue has the apply link, details, label and a hidden id marker", () => {
 test("categories outside your areas are not marked as a match", () => {
   const b = bounties.find((x) => x.id === "cmw9qtgmn0023cv86fbbihlr1");
   assert.deepEqual(formatIssue(b).labels, ["zechub-bounty"]);
+});
+
+test("completed bounties are not selected as candidates", () => {
+  const completedBounty = bounties.find((x) => x.id === "cmwt4xi2n002gcv2vmtrb8dru");
+  assert.equal(selectCandidates([completedBounty], now).length, 0, "DONE bounties should not be selected");
 });
 
 test("bounty text cannot mention people, link issues or plant a marker", () => {
