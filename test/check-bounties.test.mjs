@@ -73,6 +73,34 @@ test("bounty text cannot mention people, link issues or plant a marker", () => {
   assert.equal(neutralize("a@b #3"), "a@​b #​3");
 });
 
+test("selectCandidates excludes bounties with \"test\" in the title", () => {
+  const now = new Date("2026-11-12T00:00:00Z");
+  const bounties = [
+    {
+      id: "test1",
+      isApproved: true,
+      isPrivate: false,
+      status: "TO_DO",
+      dateCreated: "2026-11-11T10:00:00Z",
+      title: "This is a test bounty",
+      assignee: undefined,
+      assignees: [],
+    },
+    {
+      id: "real1",
+      isApproved: true,
+      isPrivate: false,
+      status: "TO_DO",
+      dateCreated: "2026-11-11T10:00:00Z",
+      title: "Real bounty",
+      assignee: undefined,
+      assignees: [],
+    },
+  ];
+  const ids = selectCandidates(bounties, now).map((b) => b.id);
+  assert.deepEqual(ids, ["real1"]);
+});
+
 test("telegram message escapes HTML from the bounty title", () => {
   const msg = formatTelegram({
     id: "x2",

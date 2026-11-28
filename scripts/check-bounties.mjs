@@ -49,7 +49,9 @@ export function selectCandidates(bounties, now = new Date()) {
       OPEN_STATUSES.has(b.status) &&
       !alreadyTaken(b) &&
       new Date(b.dateCreated).getTime() >= since &&
-      !/^\s*(zcash\s+)?test\b/i.test(b.title || ""),
+      // Exclude any bounty whose title contains the word “test” (optionally prefixed by “zcash”)
+      // This prevents test bounties from being advertised.
+      !/\b(zcash\s+)?test\b/i.test(b.title || ""),
   );
 }
 
